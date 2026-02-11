@@ -1,5 +1,8 @@
 # Password Manager
 
+
+
+
 ## Overview
 This is a simple Password Manager GUI application built with Python. It's part of the **Udemy 100 Days of Code™: The Complete Python Pro Bootcamp**.
 

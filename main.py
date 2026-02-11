@@ -53,8 +53,8 @@ def save_pass():
 
 window = tk.Tk()
 window.config(pady=50, padx=50)
-window.maxsize(530, 400)
-window.minsize(530, 400)
+window.maxsize(550, 400)
+window.minsize(550, 400)
 
 #canvas
 logo = tk.PhotoImage(file="logo.png")
