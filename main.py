@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import messagebox
 import random
 import pyperclip
+import json
 
 # ---------------------------- PASSWORD GENERATOR ------------------------------- #
 letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
@@ -33,17 +34,30 @@ def save_pass():
     website_out = website_entry.get()
     email_out = email_entry.get()
     password_out = password_entry.get()
-    print(len(website_out), len(password_out), len(email_out))
 
+    new_data = {
+        website_out: {
+            "email": email_out,
+            "password": password_out,
+        }
+    }
     if len(website_out) < 1 or len(password_out) < 4 or len(email_out) < 6:
         messagebox.showerror(message="You must fill in all the fields")
 
+    #    popup = messagebox.askokcancel(title="Information", message=f"These are the details: \nwebsite: {website_out}\nemail: {email_out} "
+    #                                        f"\npassword: {password_out}, \nIs it okay to save?")
+    #    if popup:
     else:
-        popup = messagebox.askokcancel(title="Information", message=f"These are the details: \nwebsite: {website_out}\nemail: {email_out} "
-                                            f"\npassword: {password_out}, \nIs it okay to save?")
-        if popup:
-            with open("data.txt", "a") as data:
-                data.write(f"{website_out} | {email_out} | {password_out} \n")
+        try:
+            with open("data.json", "r") as data_file:
+                data = json.load(data_file)
+                data.update(new_data)
+        except json.JSONDecodeError, FileNotFoundError:
+            with open("data.json", "w") as data_file:
+                json.dump(new_data, data_file, indent=4)
+        else:
+            with open("data.json", "w") as data_file:
+                json.dump(data, data_file, indent=4)
 
             website_entry.delete(0, "end")
             password_entry.delete(0, "end")
@@ -63,8 +77,8 @@ canvas.create_image(100, 100, image=logo)
 canvas.grid(row=0, column=1, columnspan=2)
 
 #labels
-website = tk.Label(text="Website: ")
-website.grid(row=1, column=0)
+website_label = tk.Label(text="Website: ")
+website_label.grid(row=1, column=0)
 website_entry = tk.Entry(width=35)
 website_entry.grid(row=1, column=1, columnspan=2)
 website_entry.focus()
